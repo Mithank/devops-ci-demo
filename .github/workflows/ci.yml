@@ -1,4 +1,5 @@
-name: CI - Docker Build
+
+name: CI - Docker Build & Push
 
 on:
   push:
@@ -13,5 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build Docker image
-        run: docker build -t devops-ci-demo .
+        run: docker build -t ghcr.io/${{ github.actor }}/devops-ci-demo:latest .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.actor }}/devops-ci-demo:latest
