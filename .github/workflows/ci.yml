@@ -1,28 +1,17 @@
-name: CI - Build & Push Docker Image
+name: CI - Docker Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  docker-build-push:
+  docker-build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build Docker image
-      run: |
-        docker build -t ghcr.io/mithank/devops-ci-demo:latest .
-
-    - name: Push Docker image
-      run: |
-        docker push ghcr.io/mithank/devops-ci-demo:latest
+      - name: Build Docker image
+        run: docker build -t devops-ci-demo .
